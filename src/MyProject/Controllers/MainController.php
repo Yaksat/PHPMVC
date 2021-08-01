@@ -29,6 +29,6 @@ class MainController
 
     public function sayBye(string $name): void
     {
-        $this->view->renderHtml('main/sayBye.php', ['name' => $name, 'title' => 'Страница прощания']);
+        $this->view->renderHtml('main/sayBye.php', ['name' => $name, 'title' => 'Страница выхода']);
     }
 }
