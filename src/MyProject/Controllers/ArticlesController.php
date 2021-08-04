@@ -21,16 +21,27 @@ class ArticlesController
 
     public function view(int $articleId)
     {
+        $nickName = 'Автор не найден';
+
         $result = $this->db->query(
             'SELECT * FROM `articles` WHERE id = :id;',
             [':id' => $articleId]
         );
 
         if ($result === []) {
-            //Здесь обрабатываем ошибку
+            $this->view->renderHtml('errors/404.php', [], 404);
             return;
         }
 
-        $this->view->renderHtml('articles/view.php', ['article' => $result[0]]);
+        $resultUser = $this->db->query(
+            'SELECT `nickname` FROM `users` WHERE id = :id;',
+            [':id' => $result[0]['author_id']]
+        );
+
+        if ($resultUser !== []) {
+            $nickName = $resultUser[0]['nickname'];
+        }
+        
+        $this->view->renderHtml('articles/view.php', ['article' => $result[0], 'nickName' => $nickName]);
     }
 }
