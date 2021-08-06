@@ -41,7 +41,7 @@ class ArticlesController
         if ($resultUser !== []) {
             $nickName = $resultUser[0]['nickname'];
         }
-        
+
         $this->view->renderHtml('articles/view.php', ['article' => $result[0], 'nickName' => $nickName]);
     }
 }
