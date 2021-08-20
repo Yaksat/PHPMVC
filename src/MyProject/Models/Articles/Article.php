@@ -21,5 +21,14 @@ class Article
     /** @var string */
     private $createdAt;
 
+    public function __set($name, $value)
+    {
+        $camelCaseName = $this->underscoreToCamelCase($name);
+        $this->$camelCaseName = $value;
+    }
 
+    private function underscoreToCamelCase(string $source): string
+    {
+        return lcfirst(str_replace('_', '', ucwords($source, '_')));
+    }
 }
