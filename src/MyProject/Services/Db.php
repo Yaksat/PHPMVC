@@ -4,10 +4,12 @@ namespace MyProject\Services;
 
 class Db // класс для соединения и работы с базой данных
 {
+    private static $instance;
+
     /** @var \PDO */
     private $pdo;
 
-    public function __construct()
+    private function __construct()
     {
         $dbOptions = (require __DIR__ . '/../../settings.php')['db'];
 
@@ -29,5 +31,13 @@ class Db // класс для соединения и работы с базой
         }
 
         return $sth->fetchAll(\PDO::FETCH_CLASS, $className);
+    }
+
+    public static function getInstance(): self  //паттерн проектирования Singleton(синглтон)
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 }
