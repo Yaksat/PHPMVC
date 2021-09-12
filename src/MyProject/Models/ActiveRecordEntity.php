@@ -46,4 +46,44 @@ abstract class ActiveRecordEntity
     }
 
     abstract protected static function getTableName(): string;
+
+    public function save(): void
+    {
+        $mappedProperties = $this->mapPropertiesToDbFormat();
+        if ($this->id !== null) {
+            $this->update($mappedProperties);
+        } else {
+            $this->insert($mappedProperties);
+        }
+    }
+
+    private function update(array $mappedProperties): void
+    {
+
+    }
+
+    private function insert(array $mappedProperties): void
+    {
+
+    }
+
+    private function mapPropertiesToDbFormat(): array
+    {
+        $reflector = new \ReflectionObject($this);
+        $properties = $reflector->getProperties();
+
+        $mappedProperties = [];
+        foreach ($properties as $property) {
+            $propertyName = $property->getName();
+            $propertyNameAsUnderscore = $this->camelCaseToUnderscore($propertyName);
+            $mappedProperties[$propertyNameAsUnderscore] = $this->$propertyName;
+        }
+
+        return $mappedProperties;
+    }
+
+    private function camelCaseToUnderscore(string $source): string
+    {
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $source));
+    }
 }
