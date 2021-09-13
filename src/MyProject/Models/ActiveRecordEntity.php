@@ -59,7 +59,18 @@ abstract class ActiveRecordEntity
 
     private function update(array $mappedProperties): void
     {
-
+        $columns2params = [];
+        $params2values = [];
+        $index = 1;
+        foreach ($mappedProperties as $column => $value) {
+            $param = ':param' . $index; // :param1
+            $columns2params[] = $column . ' = ' . $param; // column1 = :param1
+            $params2values[$param] = $value; // [:param => value1]
+            $index++;
+        }
+        $sql = 'UPDATE ' . static::getTableName() . ' SET ' . implode(', ', $columns2params) . ' WHERE id = ' . $this->id;
+        $db = Db::getInstance();
+        $db->query($sql, $params2values, static::class);
     }
 
     private function insert(array $mappedProperties): void
