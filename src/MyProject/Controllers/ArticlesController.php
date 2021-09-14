@@ -44,6 +44,17 @@ class ArticlesController
         $article->save();
     }
 
+    public function create(): void
+    {
+        $article = new Article;
+
+        $article->setName('Самая новая статья');
+        $article->setText('Самый новый текст');
+        $article->setAuthorId('1');
+
+        $article->save();
+    }
+
 
 
 
