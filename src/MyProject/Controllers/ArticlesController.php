@@ -3,6 +3,7 @@
 namespace MyProject\Controllers;
 
 use MyProject\Models\Articles\Article;
+use MyProject\Models\Users\User;
 use MyProject\View\View;
 
 class ArticlesController
@@ -44,15 +45,18 @@ class ArticlesController
         $article->save();
     }
 
-    public function create(): void
+    public function add(): void
     {
-        $article = new Article;
+        $author = User::getById(1);
 
+        $article = new Article();
+        $article->setAuthor($author);
         $article->setName('Самая новая статья');
         $article->setText('Самый новый текст');
-        $article->setAuthorId('1');
 
         $article->save();
+
+        var_dump($article);
     }
 
 

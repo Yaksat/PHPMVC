@@ -76,21 +76,20 @@ abstract class ActiveRecordEntity
     private function insert(array $mappedProperties): void
     {
         $filteredProperties = array_filter($mappedProperties);
-        
-        $params = [];
+
+        $paramsNames = [];
         $columns = [];
         $params2values = [];
-        $index = 1;
-        foreach ($filteredProperties as $column => $value) {
-            $param = ':param' . $index; // :param1
-            $params[] = $param; // :param1
-            $columns[] = $column;
-            $params2values[$param] = $value; // [:param => value1]
-            $index++;
+        foreach ($filteredProperties as $columnName => $value) {
+            $columns[] = '`' . $columnName . '`';
+            $paramName = ':' . $columnName;
+            $paramsNames[] = $paramName;
+            $params2values[$paramName] = $value;
         }
-        $sql = 'INSERT INTO ' . static::getTableName() . ' (' . implode(', ', $columns) . ') VALUES (' . implode(', ', $params) . ')';
+        $sql = 'INSERT INTO ' . static::getTableName() . ' (' . implode(', ', $columns) . ') VALUES (' . implode(', ', $paramsNames) . ');';
         $db = Db::getInstance();
         $db->query($sql, $params2values, static::class);
+        $this->id = $db->getLastInsertId();
     }
 
     private function mapPropertiesToDbFormat(): array
