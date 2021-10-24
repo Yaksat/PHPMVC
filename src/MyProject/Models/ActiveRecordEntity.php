@@ -90,6 +90,16 @@ abstract class ActiveRecordEntity
         $db = Db::getInstance();
         $db->query($sql, $params2values, static::class);
         $this->id = $db->getLastInsertId();
+        $this->refresh();
+    }
+
+    //чтобы поля объекта обновлялись значениями из БД. Например, в поле createdAt должна появиться строка с датой
+    private function refresh(): void
+    {
+        $objectFromDb = static::getById($this->id);
+        foreach ($objectFromDb as $property => $value) {
+            $this->$property = $value;
+        }
     }
 
     private function mapPropertiesToDbFormat(): array

@@ -19,6 +19,8 @@ class Db // класс для соединения и работы с базой
             $dbOptions['password']
         );
         $this->pdo->exec('SET NAMES UTF8');
+        $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+        $this->pdo->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);
     }
 
     public function query(string $sql, $params = [], string $className = 'stdClass'): ?array
