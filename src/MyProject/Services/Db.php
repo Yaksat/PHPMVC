@@ -1,6 +1,7 @@
 <?php
 
 namespace MyProject\Services;
+use MyProject\Exceptions\DbException;
 
 class Db // класс для соединения и работы с базой данных
 {
@@ -13,14 +14,18 @@ class Db // класс для соединения и работы с базой
     {
         $dbOptions = (require __DIR__ . '/../../settings.php')['db'];
 
-        $this->pdo = new \PDO(
-            'mysql:host=' . $dbOptions['host'] . ';dbname=' . $dbOptions['dbname'],
-            $dbOptions['user'],
-            $dbOptions['password']
-        );
-        $this->pdo->exec('SET NAMES UTF8');
-        $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
-        $this->pdo->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);
+        try {
+            $this->pdo = new \PDO(
+                'mysql:host=' . $dbOptions['host'] . ';dbname=' . $dbOptions['dbname'],
+                $dbOptions['user'],
+                $dbOptions['password']
+            );
+            $this->pdo->exec('SET NAMES UTF8');
+            $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+            $this->pdo->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);
+        } catch (\PDOException $e) {
+            throw new DbException('Ошибка при подключении к базе данных: ' . $e->getMessage());
+        }
     }
 
     public function query(string $sql, $params = [], string $className = 'stdClass'): ?array
