@@ -6,6 +6,8 @@ return [
     '~^articles/(\d+)/delete$~' => [\MyProject\Controllers\ArticlesController::class, 'delete'],
     '~^articles/add$~' => [\MyProject\Controllers\ArticlesController::class, 'add'],
     '~^users/register$~' => [\MyProject\Controllers\UsersController::class, 'signUp'],
+    '~^users/login$~' => [\MyProject\Controllers\UsersController::class, 'login'],
+    '~^users/(\d+)/activate/(.+)$~' => [\MyProject\Controllers\UsersController::class, 'activate'],
     '~^$~' => [\MyProject\Controllers\MainController::class, 'main'],
 ];
 //То есть это просто массив, у которого ключи – это регулярка для адреса, а значение – это массив с двумя значениями –

@@ -39,9 +39,30 @@ class User extends ActiveRecordEntity
     /**
      * @return string
      */
+    public function getPasswordHash(): string
+    {
+        return $this->passwordHash;
+    }
+
+    public function getAuthToken(): string
+    {
+        return $this->authToken;
+    }
+
+    /**
+     * @return string
+     */
     public function getNickname(): string
     {
         return $this->nickname;
+    }
+
+    /**
+     * @return int
+     */
+    public function IsConfirmed(): int
+    {
+        return $this->isConfirmed;
     }
 
     protected static function getTableName(): string
@@ -93,5 +114,47 @@ class User extends ActiveRecordEntity
         $user->save();
 
         return $user;
+    }
+
+    public function activate(): void
+    {
+        $this->isConfirmed = true;
+        $this->save();
+        UserActivationService::deleteActivationCode($this->getId());
+    }
+
+    public static function login(array $loginData): User
+    {
+        if (empty($loginData['email'])) {
+            throw new InvalidArgumentException('Не передан email');
+        }
+
+        if (empty($loginData['password'])) {
+            throw new InvalidArgumentException('Не передан password');
+        }
+
+        $user = User::findOneByColumn('email', $loginData['email']);
+
+        if ($user === null) {
+            throw new InvalidArgumentException('Пользователь с таким email не найден');
+        }
+
+        if (!password_verify($loginData['password'], $user->getPasswordHash())){
+            throw new InvalidArgumentException('Неправильный пароль');
+        }
+
+        if (!$user->isConfirmed){
+            throw new InvalidArgumentException('Пользователь не подтвержден');
+        }
+
+        $user->refreshAuthToken();
+        $user->save();
+
+        return $user;
+    }
+
+    private function refreshAuthToken()
+    {
+        $this->authToken = sha1(random_bytes(100)) . sha1(random_bytes(100));
     }
 }
