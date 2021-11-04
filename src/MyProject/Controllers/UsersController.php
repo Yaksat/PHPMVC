@@ -12,6 +12,12 @@ class UsersController extends AbstractController
 {
     public function login()
     {
+        /* Если пользователь уже залогинен, то кидаем на главную */
+        if ($this->user!==null){
+            header('Location: /');
+            exit();
+        }
+
         if (!empty($_POST)){
             try {
                 $user = User::login($_POST);
@@ -26,6 +32,12 @@ class UsersController extends AbstractController
 
         }
         $this->view->renderHtml('users/login.php');
+    }
+
+    public function logout()
+    {
+        setcookie('token','',time()-3600,'/');
+        header('Location: /');
     }
 
     public function signUp()

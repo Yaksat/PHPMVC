@@ -16,9 +16,7 @@ class ArticlesController extends AbstractController
             throw new NotFoundException();
         }
 
-        $this->view->renderHtml('articles/view.php', [
-            'article' => $article
-        ]);
+        $this->view->renderHtml('articles/view.php', ['article' => $article]);
     }
 
     public function edit(int $articleId): void
