@@ -8,6 +8,7 @@ use MyProject\Exceptions\NotAdminException;
 use MyProject\Exceptions\NotFoundException;
 use MyProject\Exceptions\UnauthorizedException;
 use MyProject\Models\Articles\Article;
+use MyProject\Models\Comments\Comment;
 use MyProject\Models\Users\User;
 
 class ArticlesController extends AbstractController
@@ -15,12 +16,19 @@ class ArticlesController extends AbstractController
     public function view(int $articleId): void
     {
         $article = Article::getById($articleId);
+        $comments = Comment::findAll();
+
+        $isEditable = false;
 
         if ($article === null) {
             throw new NotFoundException();
         }
 
-        $this->view->renderHtml('articles/view.php', ['article' => $article]);
+        if ($this->user !== null && $this->user->isAdmin()) {
+            $isEditable = true;
+        }
+
+        $this->view->renderHtml('articles/view.php', ['article' => $article, 'isEditable' => $isEditable, 'comments' => $comments]);
     }
 
     public function edit(int $articleId): void
@@ -33,6 +41,10 @@ class ArticlesController extends AbstractController
 
         if ($this->user === null) {
             throw new UnauthorizedException();
+        }
+
+        if (!$this->user->isAdmin()) {
+            throw new ForbiddenException('Только пользователи с ролью admin могут редактировать статьи');
         }
 
         if (!empty($_POST)) {

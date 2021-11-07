@@ -65,14 +65,6 @@ class Article extends ActiveRecordEntity
         $this->text = $text;
     }
 
-    /**
-     * @param string $authorId
-     */
-    public function setAuthorId(string $authorId): void
-    {
-        $this->authorId = $authorId;
-    }
-
     public function setAuthor(User $author): void
     {
         $this->authorId = $author->getId();
@@ -104,11 +96,11 @@ class Article extends ActiveRecordEntity
     public function updateFromArray(array $fields): void
     {
         if (empty($fields['name'])) {
-            throw new \http\Exception\InvalidArgumentException('Не передано название статьи');
+            throw new InvalidArgumentException('Не передано название статьи');
         }
 
         if (empty($fields['text'])) {
-            throw new \http\Exception\InvalidArgumentException('Не передан текст статьи');
+            throw new InvalidArgumentException('Не передан текст статьи');
         }
 
         $this->setName($fields['name']);
