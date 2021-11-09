@@ -5,11 +5,13 @@ return [
     '~^articles/(\d+)/edit$~' => [\MyProject\Controllers\ArticlesController::class, 'edit'],
     '~^articles/(\d+)/delete$~' => [\MyProject\Controllers\ArticlesController::class, 'delete'],
     '~^articles/(\d+)/comments$~' => [\MyProject\Controllers\CommentsController::class, 'add'],
+    '~^comments/(\d+)/edit$~' => [\MyProject\Controllers\CommentsController::class, 'edit'],
     '~^articles/add$~' => [\MyProject\Controllers\ArticlesController::class, 'add'],
     '~^users/register$~' => [\MyProject\Controllers\UsersController::class, 'signUp'],
     '~^users/login$~' => [\MyProject\Controllers\UsersController::class, 'login'],
     '~^user/logout$~' => [\MyProject\Controllers\UsersController::class, 'logout'],
     '~^users/(\d+)/activate/(.+)$~' => [\MyProject\Controllers\UsersController::class, 'activate'],
+    '~^admin$~' => [\MyProject\Controllers\AdminController::class, 'view'],
     '~^$~' => [\MyProject\Controllers\MainController::class, 'main'],
 ];
 //То есть это просто массив, у которого ключи – это регулярка для адреса, а значение – это массив с двумя значениями –

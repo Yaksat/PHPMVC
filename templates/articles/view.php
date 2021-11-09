@@ -19,10 +19,15 @@
     <?php else: ?>
         <p>Для добавления комментария зарегистрируйтесь</p>
     <?php endif; ?>
-    <?php foreach ($comments as $comment): ?>
-        <?php if ($comment->getArticleId() === $article->getId()): ?>
-            <h4><?= $comment->getUser()->getNickname() . ' ' . $comment->getCreatedAt() ?></h4>
+    <?php if ($comments !== null): ?>
+        <?php foreach ($comments as $comment): ?>
+            <h4 id="comment<?= $comment->getId(); ?>"><?= $comment->getUser()->getNickname() . ' ' . $comment->getCreatedAt() ?></h4>
             <p><?= $comment->getText() ?></p>
-        <?php endif; ?>
-    <?php endforeach; ?>
+            <?php if ($user !== null): ?>
+                <?php if (($user->getId() === $comment->getUserId()) || $user->isAdmin()): ?>
+                    <p><a href="/comments/<?= $comment->getId(); ?>/edit">Редактировать</a></p>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
 <?php include __DIR__ . '/../footer.php'; ?>

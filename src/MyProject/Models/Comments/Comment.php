@@ -25,6 +25,23 @@ class Comment extends ActiveRecordEntity
         return 'comments';
     }
 
+    /**
+     * @return int
+     */
+
+    /**
+     * @param string $text
+     */
+    public function setText(string $text): void
+    {
+        $this->text = $text;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
     public function getUser(): User
     {
         return User::getById($this->userId);
@@ -69,6 +86,17 @@ class Comment extends ActiveRecordEntity
         $comment->save();
 
         return $comment;
+    }
+
+    public function updateFromArray(array $fields): void
+    {
+        if (empty($fields['comment'])){
+            throw new InvalidArgumentException('Введите текст комментария');
+        }
+
+        $this->setText($fields['comment']);
+
+        $this->save();
     }
 
 }

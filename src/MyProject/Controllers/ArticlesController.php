@@ -16,7 +16,7 @@ class ArticlesController extends AbstractController
     public function view(int $articleId): void
     {
         $article = Article::getById($articleId);
-        $comments = Comment::findAll();
+        $comments = Comment::findByColumn('article_id', $articleId);
 
         $isEditable = false;
 
