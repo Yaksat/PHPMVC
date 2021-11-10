@@ -107,6 +107,14 @@ class Article extends ActiveRecordEntity
         $this->setText($fields['text']);
 
         $this->save();
+    }
 
+    public static function findAllShort(): array
+    {
+        $articles = Article::findAll();
+        foreach ($articles as $article) {
+            $article->text =  mb_strimwidth($article->text, 0, 100, "...");
+        }
+        return $articles;
     }
 }

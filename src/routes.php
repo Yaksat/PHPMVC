@@ -12,6 +12,8 @@ return [
     '~^user/logout$~' => [\MyProject\Controllers\UsersController::class, 'logout'],
     '~^users/(\d+)/activate/(.+)$~' => [\MyProject\Controllers\UsersController::class, 'activate'],
     '~^admin$~' => [\MyProject\Controllers\AdminController::class, 'view'],
+    '~^admin/articles$~' => [\MyProject\Controllers\AdminController::class, 'articlesView'],
+    '~^admin/comments$~' => [\MyProject\Controllers\AdminController::class, 'commentsView'],
     '~^$~' => [\MyProject\Controllers\MainController::class, 'main'],
 ];
 //То есть это просто массив, у которого ключи – это регулярка для адреса, а значение – это массив с двумя значениями –
