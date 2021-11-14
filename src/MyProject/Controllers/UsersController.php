@@ -3,6 +3,8 @@
 namespace MyProject\Controllers;
 
 use MyProject\Exceptions\InvalidArgumentException;
+use MyProject\Exceptions\UnauthorizedException;
+use MyProject\Exceptions\UploadException;
 use MyProject\Models\Users\User;
 use MyProject\Models\Users\UserActivationService;
 use MyProject\Models\Users\UsersAuthService;
@@ -86,5 +88,42 @@ class UsersController extends AbstractController
         } else {
             $this->view->renderHtml('users/notActivate.php', ['error' => 'Неверный код активации']);
         }
+    }
+
+    public function avatar (): void
+    {
+        if ($this->user === null){
+            throw new UnauthorizedException();
+        }
+
+        if (!empty($_FILES['userfile'])) {
+            try {
+                $uploaded = $this->user->setAvatar($_FILES['userfile']);
+                $this->view->renderHtml('users/avatar.php', ['uploaded' => $uploaded]);
+                return;
+            } catch (UploadException $e) {
+                $this->view->renderHtml('users/avatar.php', ['error' => $e->getMessage()]);
+                return;
+            }
+        }
+
+        $this->view->renderHtml('users/avatar.php');
+    }
+
+    public function image (string $g)
+    {
+        if ($this->user === null){
+            throw new UnauthorizedException();
+        }
+
+
+        return '<img src="/uploads/1.jpg">';
+      //  $filepath = __DIR__ . '/../../../uploads/' . $g;
+
+//var_dump($filepath);
+
+
+
+
     }
 }

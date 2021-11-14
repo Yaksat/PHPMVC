@@ -32,7 +32,7 @@ class AdminController extends AbstractController
             throw new ForbiddenException('Только пользователи с ролью admin могут попасть на эту страницу');
         }
 
-        $articles = Article::findAllShort(); //вместо этого сделать вывод статей не полностью
+        $articles = Article::findAllShort();
         $this->view->renderHtml('admin/articles.php', ['articles' => $articles]);
     }
 

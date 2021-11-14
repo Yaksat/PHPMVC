@@ -2,6 +2,7 @@
 
 namespace MyProject\Models\Users;
 
+use MyProject\Exceptions\UploadException;
 use MyProject\Models\ActiveRecordEntity;
 use MyProject\Exceptions\InvalidArgumentException;
 
@@ -27,6 +28,9 @@ class User extends ActiveRecordEntity
 
     /** @var string */
     protected $createdAt;
+
+    /** @var string */
+    protected $avatar;
 
     /**
      * @return string
@@ -71,6 +75,14 @@ class User extends ActiveRecordEntity
     public function getRole(): string
     {
         return $this->role;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAvatar(): string
+    {
+        return $this->avatar;
     }
 
     protected static function getTableName(): string
@@ -169,5 +181,58 @@ class User extends ActiveRecordEntity
     private function refreshAuthToken()
     {
         $this->authToken = sha1(random_bytes(100)) . sha1(random_bytes(100));
+    }
+
+    public function setAvatar (array $file): string
+    {
+        if ($file['error'] === UPLOAD_ERR_OK) {
+            $srcFileName = time() . $file['name'];
+            $newFilePath = __DIR__ . '/../../../../uploads/' . $srcFileName;
+
+            $allowedExtensions = ['jpg', 'png', 'gif'];
+            $extension = pathinfo($srcFileName, PATHINFO_EXTENSION);
+
+            if (!in_array($extension, $allowedExtensions)) {
+                throw new UploadException('Загрузка файлов с таким расширением запрещена');
+            } elseif (file_exists($newFilePath)) {
+                throw new UploadException('Файл с таким именем уже существует');
+            } elseif (!move_uploaded_file($file['tmp_name'], $newFilePath)) {
+                throw new UploadException('Ошибка при загрузке файла');
+            } else {
+                //'http://phpmvc/uploads/'. $srcFileName
+                $this->avatar =  $srcFileName;
+                $this->save();
+               // return 'Файл ' . $file['name'] . ' загружен';
+                return $newFilePath;
+            }
+        } else {
+            switch ($file['error']) {
+                case UPLOAD_ERR_INI_SIZE:
+                    throw new UploadException('The uploaded file exceeds the upload_max_filesize directive in php.ini');
+                    break;
+                case UPLOAD_ERR_FORM_SIZE:
+                    throw new UploadException('Размер файла должен быть не больше 90КБ');
+                    break;
+                case UPLOAD_ERR_PARTIAL:
+                    throw new UploadException('The uploaded file was only partially uploaded');
+                    break;
+                case UPLOAD_ERR_NO_FILE:
+                    throw new UploadException('No file was uploaded');
+                    break;
+                case UPLOAD_ERR_NO_TMP_DIR:
+                    throw new UploadException('Missing a temporary folder');
+                    break;
+                case UPLOAD_ERR_CANT_WRITE:
+                    throw new UploadException('Failed to write file to disk');
+                    break;
+                case UPLOAD_ERR_EXTENSION:
+                    throw new UploadException('File upload stopped by extension');
+                    break;
+
+                default:
+                    throw new UploadException('Unknown upload error');
+                    break;
+            }
+        }
     }
 }
