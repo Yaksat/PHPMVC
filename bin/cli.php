@@ -26,6 +26,10 @@ try {
         }
     }
 
+    if (!is_subclass_of($className, 'AbstractCommand')) {
+        throw new \MyProject\Exceptions\CliException('Class "' . $className . '" not extends AbstractCommand');
+    }
+
     // Создаём экземпляр класса, передав параметры и вызываем метод execute()
     $class = new $className($params);
     $class->execute();
