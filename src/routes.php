@@ -12,7 +12,7 @@ return [
     '~^user/logout$~' => [\MyProject\Controllers\UsersController::class, 'logout'],
     '~^users/(\d+)/activate/(.+)$~' => [\MyProject\Controllers\UsersController::class, 'activate'],
     '~^user/avatar$~' => [\MyProject\Controllers\UsersController::class, 'avatar'],
-    //'~^uploads/(.+)$~' => [\MyProject\Controllers\UsersController::class, 'image'],
+    '~^user/defaultAvatar$~' => [\MyProject\Controllers\UsersController::class, 'defaultAvatar'],
     '~^admin$~' => [\MyProject\Controllers\AdminController::class, 'view'],
     '~^admin/articles$~' => [\MyProject\Controllers\AdminController::class, 'articlesView'],
     '~^admin/comments$~' => [\MyProject\Controllers\AdminController::class, 'commentsView'],

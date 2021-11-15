@@ -21,7 +21,11 @@
     <?php endif; ?>
     <?php if ($comments !== null): ?>
         <?php foreach ($comments as $comment): ?>
-            <h4 id="comment<?= $comment->getId(); ?>"><?= $comment->getUser()->getNickname() . ' ' . $comment->getCreatedAt() ?></h4>
+            <?php if ($comment->getUser() !== null): ?>
+                <h4 id="comment<?= $comment->getId(); ?>"><?= $comment->getUser()->getNickname() . ' ' . $comment->getCreatedAt() ?></h4>
+            <?php else: ?>
+                <h4 id="comment<?= $comment->getId(); ?>"><?= 'Пользователь удален ' . $comment->getCreatedAt() ?></h4>
+            <?php endif; ?>
             <p><?= $comment->getText() ?></p>
             <?php if ($user !== null): ?>
                 <?php if (($user->getId() === $comment->getUserId()) || $user->isAdmin()): ?>

@@ -26,10 +26,6 @@ class Comment extends ActiveRecordEntity
     }
 
     /**
-     * @return int
-     */
-
-    /**
      * @param string $text
      */
     public function setText(string $text): void
@@ -42,9 +38,9 @@ class Comment extends ActiveRecordEntity
         return $this->userId;
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
-        return User::getById($this->userId);
+        return User::getById($this->userId) ? : null;
     }
 
     /**

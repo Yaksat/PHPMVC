@@ -136,6 +136,7 @@ class User extends ActiveRecordEntity
         $user->isConfirmed = false;
         $user->role = 'user';
         $user->authToken = sha1(random_bytes(100)) . sha1(random_bytes(100));
+        $user->avatar = '1.svg';
         $user->save();
 
         return $user;
@@ -183,13 +184,13 @@ class User extends ActiveRecordEntity
         $this->authToken = sha1(random_bytes(100)) . sha1(random_bytes(100));
     }
 
-    public function setAvatar (array $file): string
+    public function setAvatar (array $file): void
     {
         if ($file['error'] === UPLOAD_ERR_OK) {
             $srcFileName = time() . $file['name'];
-            $newFilePath = __DIR__ . '/../../../../uploads/' . $srcFileName;
+            $newFilePath = __DIR__ . '/../../../../www/uploads/' . $srcFileName;
 
-            $allowedExtensions = ['jpg', 'png', 'gif'];
+            $allowedExtensions = ['jpg', 'png', 'gif', 'svg'];
             $extension = pathinfo($srcFileName, PATHINFO_EXTENSION);
 
             if (!in_array($extension, $allowedExtensions)) {
@@ -199,11 +200,12 @@ class User extends ActiveRecordEntity
             } elseif (!move_uploaded_file($file['tmp_name'], $newFilePath)) {
                 throw new UploadException('Ошибка при загрузке файла');
             } else {
-                //'http://phpmvc/uploads/'. $srcFileName
+
+                // Удаляем файл предыдущего аватара, если только это не файл аватара по умолчанию.
+                $this->deleteFileOldAvatar();
+
                 $this->avatar =  $srcFileName;
                 $this->save();
-               // return 'Файл ' . $file['name'] . ' загружен';
-                return $newFilePath;
             }
         } else {
             switch ($file['error']) {
@@ -232,6 +234,24 @@ class User extends ActiveRecordEntity
                 default:
                     throw new UploadException('Unknown upload error');
                     break;
+            }
+        }
+    }
+
+    public function defaultAvatar(): void
+    {
+        $this->deleteFileOldAvatar();
+        $this->avatar = '1.svg';
+        $this->save();
+    }
+
+    // Удаляем файл предыдущего аватара, если только это не файл аватара по умолчанию.
+    private function deleteFileOldAvatar(): void
+    {
+        if ($this->avatar !== '1.svg') {
+            $oldFileAvatar = __DIR__ . '/../../../../www/uploads/' . $this->avatar;
+            if (file_exists($oldFileAvatar)) {
+                unlink($oldFileAvatar);
             }
         }
     }

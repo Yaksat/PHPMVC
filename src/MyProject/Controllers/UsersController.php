@@ -98,8 +98,8 @@ class UsersController extends AbstractController
 
         if (!empty($_FILES['userfile'])) {
             try {
-                $uploaded = $this->user->setAvatar($_FILES['userfile']);
-                $this->view->renderHtml('users/avatar.php', ['uploaded' => $uploaded]);
+                $this->user->setAvatar($_FILES['userfile']);
+                $this->view->renderHtml('users/avatar.php', ['userFileName' => $_FILES['userfile']['name']]);
                 return;
             } catch (UploadException $e) {
                 $this->view->renderHtml('users/avatar.php', ['error' => $e->getMessage()]);
@@ -110,20 +110,13 @@ class UsersController extends AbstractController
         $this->view->renderHtml('users/avatar.php');
     }
 
-    public function image (string $g)
+    public function defaultAvatar (): void
     {
         if ($this->user === null){
             throw new UnauthorizedException();
         }
 
-
-        return '<img src="/uploads/1.jpg">';
-      //  $filepath = __DIR__ . '/../../../uploads/' . $g;
-
-//var_dump($filepath);
-
-
-
-
+        $this->user->defaultAvatar();
+        $this->view->renderHtml('users/avatar.php');
     }
 }
