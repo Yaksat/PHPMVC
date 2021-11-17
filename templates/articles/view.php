@@ -1,9 +1,14 @@
 <?php include __DIR__ . '/../header.php'; ?>
     <h1><?= $article->getName() ?></h1>
     <p><?= $article->getText() ?></p>
-    <p>Автор: <?= $article->getAuthor()->getNickname() ?></p>
+    <?php if ($article->getAuthor() !== null): ?>
+        <p>Автор: <?= $article->getAuthor()->getNickname() ?></p>
+    <?php else: ?>
+        <p>Автор неизвестен. Пользователь удален.</p>
+    <?php endif; ?>
     <?php if ($isEditable): ?>
         <p><a href="/articles/<?= $article->getId(); ?>/edit">Редактировать</a></p>
+        <p><a href="/articles/<?= $article->getId(); ?>/delete">Удалить статью</a></p>
     <?php endif; ?>
     <br>
     <h3>Комментарии</h3>

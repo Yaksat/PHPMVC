@@ -4,4 +4,5 @@
     <p><?= $article->getText() ?></p>
     <hr>
 <?php endforeach; ?>
+<a href="/articles/add">Добавить статью</a>
 <?php include __DIR__ . '/../footer.php'; ?>

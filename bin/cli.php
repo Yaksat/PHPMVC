@@ -26,7 +26,7 @@ try {
         }
     }
 
-    if (!is_subclass_of($className, 'AbstractCommand')) {
+    if (!is_subclass_of($className, '\\MyProject\\Cli\\AbstractCommand')) {
         throw new \MyProject\Exceptions\CliException('Class "' . $className . '" not extends AbstractCommand');
     }
 

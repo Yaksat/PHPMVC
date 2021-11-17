@@ -95,4 +95,13 @@ class Comment extends ActiveRecordEntity
         $this->save();
     }
 
+    public static function deleteCommentsFromArticle(int $articleId): void
+    {
+        $comments = Comment::findByColumn('article_id', $articleId);
+        if ($comments !== null) {
+            foreach ($comments as $comment) {
+                $comment->delete();
+            }
+        }
+    }
 }

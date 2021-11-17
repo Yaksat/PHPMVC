@@ -44,9 +44,9 @@ class Article extends ActiveRecordEntity
     /**
      * @return User
      */
-    public function getAuthor(): User
+    public function getAuthor(): ?User
     {
-        return User::getById($this->authorId);
+        return User::getById($this->authorId) ? : null;
     }
 
     /**

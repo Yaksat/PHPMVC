@@ -98,7 +98,10 @@ class ArticlesController extends AbstractController
             return;
         }
 
+        // удаляем все комментарии связанные с этой статьей
+        Comment::deleteCommentsFromArticle($articleId);
+
         $article->delete();
-        var_dump($article);
+        $this->view->renderHtml('articles/delete.php');
     }
 }

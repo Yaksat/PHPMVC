@@ -1,0 +1,14 @@
+{
+    "name": "aubekerov/myproject",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Aubekerov Damir",
+            "email": "aubekerov@list.ru"
+        }
+    ],
+    "require": {
+        "erusev/parsedown": "^1.7"
+    }
+}

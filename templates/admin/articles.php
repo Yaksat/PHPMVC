@@ -5,6 +5,7 @@
         <h2><a href="/articles/<?= $article->getId() ?>"> <?= $article->getName() ?></a></h2>
         <p><?= $article->getText() ?></p>
         <p><a href="/articles/<?= $article->getId(); ?>/edit">Редактировать</a></p>
+        <p><a href="/articles/<?= $article->getId(); ?>/delete">Удалить статью</a></p>
         <hr>
     <?php endforeach; ?>
 <?php include __DIR__ . '/../footer.php'; ?>
