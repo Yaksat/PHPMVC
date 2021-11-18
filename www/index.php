@@ -3,11 +3,7 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 try {
-    spl_autoload_register(function (string $className) {
-        require_once __DIR__ . '/../src/' . str_replace('\\', '/', $className) . '.php';
-    });
-
-//Универсальная система роутинга. Создали файл routes.php.
+    //Универсальная система роутинга. Создали файл routes.php.
     $route = $_GET['route'] ?? '';
     $routes = require __DIR__ . '/../src/routes.php';
 

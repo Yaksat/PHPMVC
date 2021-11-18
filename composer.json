@@ -8,6 +8,11 @@
             "email": "aubekerov@list.ru"
         }
     ],
+    "autoload": {
+        "psr-4": {
+	    "MyProject\\": "src/MyProject/"
+	}
+    },
     "require": {
         "erusev/parsedown": "^1.7"
     }

@@ -5,11 +5,6 @@ require __DIR__ . '/../vendor/autoload.php';
 try {
     unset($argv[0]);
 
-    // регистрируем функцию автозагрузки
-    spl_autoload_register(function (string $className) {
-        require_once __DIR__ . '/../src/' . $className . '.php';
-    });
-
     // Составляем полное имя класса, добавив нэймспейс
     $className = '\\MyProject\\Cli\\' . array_shift($argv);
     if (!class_exists($className)) {

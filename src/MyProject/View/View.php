@@ -33,4 +33,11 @@ class View
 
         echo $buffer; //передаем данные в поток вывода
     }
+
+    public function displayJson($data, int $code = 200)
+    {
+        header('Content-type: application/json; charset=utf-8');
+        http_response_code($code);
+        echo json_encode($data);
+    }
 }
