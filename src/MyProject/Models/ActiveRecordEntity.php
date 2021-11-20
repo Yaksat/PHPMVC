@@ -4,10 +4,15 @@ namespace MyProject\Models;
 
 use MyProject\Services\Db;
 
-abstract class ActiveRecordEntity
+abstract class ActiveRecordEntity implements \JsonSerializable
 {
     /** @var int */
     protected $id;
+
+    public function jsonSerialize()
+    {
+        return $this->mapPropertiesToDbFormat();
+    }
 
     /**
      * @return int
