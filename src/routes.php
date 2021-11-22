@@ -17,6 +17,9 @@ return [
     '~^admin$~' => [\MyProject\Controllers\AdminController::class, 'view'],
     '~^admin/articles$~' => [\MyProject\Controllers\AdminController::class, 'articlesView'],
     '~^admin/comments$~' => [\MyProject\Controllers\AdminController::class, 'commentsView'],
+    '~^(\d+)$~' => [\MyProject\Controllers\MainController::class, 'page'],
+    '~^before/(\d+)$~' => [\MyProject\Controllers\MainController::class, 'before'],
+    '~^after/(\d+)$~' => [\MyProject\Controllers\MainController::class, 'after'],
     '~^$~' => [\MyProject\Controllers\MainController::class, 'main'],
 ];
 //То есть это просто массив, у которого ключи – это регулярка для адреса, а значение – это массив с двумя значениями –

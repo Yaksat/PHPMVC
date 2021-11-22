@@ -10,6 +10,7 @@ use MyProject\Exceptions\UnauthorizedException;
 use MyProject\Models\Articles\Article;
 use MyProject\Models\Comments\Comment;
 use MyProject\Models\Users\User;
+use MyProject\Services\CacheArticleID;
 
 class ArticlesController extends AbstractController
 {
@@ -82,6 +83,7 @@ class ArticlesController extends AbstractController
                 return;
             }
 
+            CacheArticleID::putLastArticleID(); // Добавляем id последней статьи в кэш.
             header('Location: /articles/' . $article->getId(), true, 302);
             exit();
         }
@@ -102,6 +104,7 @@ class ArticlesController extends AbstractController
         Comment::deleteCommentsFromArticle($articleId);
 
         $article->delete();
+        CacheArticleID::putLastArticleID(); // Добавляем id последней статьи в кэш.
         $this->view->renderHtml('articles/delete.php');
     }
 }

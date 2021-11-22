@@ -28,7 +28,7 @@ class Db // класс для соединения и работы с базой
         }
     }
 
-    public function query(string $sql, $params = [], string $className = 'stdClass'): ?array
+    public function query(string $sql, array $params = [], string $className = 'stdClass'): ?array
     {
         $sth = $this->pdo->prepare($sql);
         $result = $sth->execute($params);

@@ -1,5 +1,5 @@
 <?php
-
+$startTime = microtime(true);
 require __DIR__ . '/../vendor/autoload.php';
 
 try {
@@ -43,3 +43,5 @@ try {
     $view->renderHtml('403.php', ['error' => $e->getMessage(), 'user' => \MyProject\Models\Users\UsersAuthService::getUserByToken()]);
     //передаем user, чтобы отображать залогиненного пользователя на странице с ошибкой
 }
+$endTime = microtime(true);
+printf('<div style="text-align: center; padding: 5px"> Время генерации страницы: %f</div>', $endTime - $startTime);
